@@ -2,6 +2,7 @@ package com.example.mvvmdesignpattem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -15,19 +16,31 @@ public class MainActivity extends AppCompatActivity {
     Button mBtnClick;
     TextView mTv;
     EditText mEdt;
-    MyService myService;
+//    MyService myService;
+    MyDatabase myDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        myService = new MyService(getLifecycle(), new MyService.CallBack(){
+//        myService = new MyService(getLifecycle(), new MyService.CallBack(){
+//            @Override
+//            public void onListen(String lifectcle) {
+//                Log.d("BBB",lifectcle);
+//            }
+//        });
+//        getLifecycle().addObserver(myService);
+
+        myDatabase = new MyDatabase();
+
+        myDatabase.getdata().observe(this, new Observer<String>() {
             @Override
-            public void onListen(String lifectcle) {
-                Log.d("BBB",lifectcle);
+            public void onChanged(String s) {
+                Log.d("BBB",s);
             }
         });
-        getLifecycle().addObserver(myService);
+
+        myDatabase.handleData();
 
         mBtnClick = findViewById(R.id.buttonClick);
         mEdt = findViewById(R.id.editText);
